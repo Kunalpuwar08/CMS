@@ -15,37 +15,58 @@ import {Colors} from '../../utils/Colors';
 import CInput from '../../component/CInput';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-import {saveData} from '../../component/CommonStorage';
+import {getData, saveData} from '../../component/CommonStorage';
+import CLoader from '../../component/CLoader';
+import callSaveFcm from '../../common/storeFcm';
 
 const Login = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const onLogin = async () => {
+    if (email == '' || password == '') {
+      return;
+    }
+    setLoading(true);
     await axios
       .post('http://10.0.2.2:8080/login', {
         email: email,
         password: password,
       })
       .then(async res => {
+        setLoading(false);
         await saveData('userAuth', res.data);
         Toast.show({
           type: 'success',
           text2: res.data.message,
         });
-        res.data.user.role == 'admin'
-          ? navigation.navigate('adminhome')
-          : res.data.user.role == 'employee'
-          ? navigation.navigate('home')
-          : null;
+
+        const fcmToken = await getData('FcmToken');
+
+        callSaveFcm(res.data.user.id,fcmToken)
+
+        if (res.data.user.requiresPasswordChange == false) {
+          navigation.replace('changePassword');
+        } else {
+          res.data.user.role == 'admin'
+            ? navigation.replace('adminhome')
+            : res.data.user.role == 'employee'
+            ? navigation.replace('home')
+            : res.data.user.role == 'super admin'
+            ? navigation.replace('superadminhome')
+            : null;
+        }
       })
-      .catch(err =>
+      .catch(err => {
+        setLoading(false);
+        console.log(err, 'err');
         Toast.show({
           type: 'error',
           text2: err.message,
-        }),
-      );
+        });
+      });
   };
 
   return (
@@ -67,9 +88,8 @@ const Login = () => {
           <TouchableOpacity style={styles.btn} onPress={onLogin}>
             <Text style={styles.btnTxt}>Login</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.borderbtn} onPress={onSignup}>
-            <Text style={styles.borderbtnTxt}>Signup</Text>
-          </TouchableOpacity> */}
+
+          <CLoader visible={loading} />
         </View>
       </ScrollView>
     </SafeAreaView>

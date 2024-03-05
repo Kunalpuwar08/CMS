@@ -1,39 +1,47 @@
 import {
   Text,
   View,
+  Alert,
+  FlatList,
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  FlatList,
+  ScrollView,
 } from 'react-native';
+import axios from 'axios';
+import moment from 'moment';
 import {bg} from '../../assets';
-import React, {useState} from 'react';
+import {API_URL} from '../../constant';
 import {Fonts} from '../../utils/Fonts';
 import {scale} from '../../utils/Matrix';
 import {Colors} from '../../utils/Colors';
 import CInput from '../../component/CInput';
+import CLoader from '../../component/CLoader';
+import Toast from 'react-native-toast-message';
+import React, {useEffect, useState} from 'react';
 import CDropdown from '../../component/CDropdown';
+import {getData} from '../../component/CommonStorage';
 import CDatePicker from '../../component/CDatePicker';
 import {useNavigation} from '@react-navigation/native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
-import CLoader from '../../component/CLoader';
-import moment from 'moment';
-import {getData} from '../../component/CommonStorage';
-import {API_URL} from '../../constant';
-import Toast from 'react-native-toast-message';
-import axios from 'axios';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const AddProject = () => {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    getAllEmp();
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState();
-  const [status, setStatus] = useState();
-  const [priority, setPriority] = useState();
-  const [endDate, setEndDate] = useState();
+  const [type, setType] = useState('');
+  const [status, setStatus] = useState('');
+  const [priority, setPriority] = useState('');
+  const [endDate, setEndDate] = useState(null);
+  const [empList, setEmpList] = useState([]);
+  const [assignTo, setAssignTo] = useState('');
 
   const [selectedFiles, setSelectedFiles] = useState([]);
 
@@ -84,9 +92,20 @@ const AddProject = () => {
   ];
 
   const onCreateProject = async () => {
-    setLoading(true);
-
     console.log(selectedFiles, 'selectedFiles>>>>>>>>>>>>>>>>');
+
+    if (
+      name == '' ||
+      description == '' ||
+      type == '' ||
+      status == '' ||
+      priority == '' ||
+      endDate == null
+    ) {
+      Alert.alert('Warning', 'please fill all fileds');
+      return;
+    }
+    setLoading(true);
 
     const createdDate = moment(new Date()).format('ll');
     const deadlineDate = moment(endDate).format('ll');
@@ -99,10 +118,11 @@ const AddProject = () => {
     formData.append('status', status);
     formData.append('type', type);
     formData.append('priority', priority);
-    // formData.append('files', selectedFiles);
+    formData.append('assignTo', assignTo);
+
     selectedFiles.forEach(file => {
-      formData.append('files', file); // Assuming selectedFiles contains file objects
-  });
+      formData.append('files', file);
+    });
 
     const storedData = await getData('userAuth');
     const token = storedData?.token;
@@ -121,10 +141,10 @@ const AddProject = () => {
         });
         console.log(res.data, 'res');
         setLoading(false);
-        // navigation.goBack();
+        navigation.goBack();
       })
       .catch(err => {
-        console.log(err);
+        console.log(err,"errr");
         setLoading(false);
       });
   };
@@ -144,6 +164,25 @@ const AddProject = () => {
         console.log('Error occurred:', err);
       }
     }
+  };
+
+  const getAllEmp = async () => {
+    const storedData = await getData('userAuth');
+    const token = storedData?.token;
+
+    await axios
+      .get(`${API_URL}/employeesName`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
+      })
+      .then(res => {
+        setEmpList(res.data.employees);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   const renderFiles = ({item, index}) => {
@@ -167,7 +206,7 @@ const AddProject = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={{marginTop: scale(12)}}>
+      <ScrollView style={{marginTop: scale(12)}}>
         <CInput
           otherStyle={styles.input}
           label={'Project Name'}
@@ -208,6 +247,13 @@ const AddProject = () => {
           onValueChange={txt => setPriority(txt)}
         />
 
+        <CDropdown
+          placeholder={'Assign To'}
+          label={'Select Employee'}
+          data={empList}
+          onValueChange={txt => setAssignTo(txt)}
+        />
+
         <View style={{alignSelf: 'center', width: '90%'}}>
           {selectedFiles.length == 0 ? (
             <>
@@ -230,7 +276,7 @@ const AddProject = () => {
         <TouchableOpacity style={styles.createBtn} onPress={onCreateProject}>
           <Text style={styles.createBtnTxt}>Create Project</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
 
       <CLoader visible={loading} />
     </ImageBackground>

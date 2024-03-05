@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Colors} from '../utils/Colors';
 import {scale} from '../utils/Matrix';
 
-const CDropdown = ({label, data, placeholder,onValueChange}) => {
+const CDropdown = ({label, data, placeholder,onValueChange,otherStyle}) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -22,7 +22,7 @@ const CDropdown = ({label, data, placeholder,onValueChange}) => {
     <View style={styles.container}>
       {renderLabel()}
       <Dropdown
-        style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+        style={[styles.dropdown, isFocus && {borderColor: 'blue'},otherStyle]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={styles.iconStyle}

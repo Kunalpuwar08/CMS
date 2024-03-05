@@ -19,26 +19,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Project = () => {
   const navigation = useNavigation();
-  const [listData, setListData] = useState([
-    {
-      admin: 'mahesh soni',
-      companyId: 'admin@gryffincode.com',
-      contributor: '5',
-      createdDate: '01-11-22',
-      deadlineDate: '01-11-23',
-      description:
-        "this project is based on insurance system and it's build on react native",
-      files: [],
-      id: '54f74390-d9a0-4668-b31b-1b3fc8ce8bab',
-      name: 'absli',
-      priority: 'high',
-      status: 'process',
-      task: [],
-      assignTo: 'mahesh',
-    },
-  ]);
+  const [listData, setListData] = useState([]);
+
   useEffect(() => {
-    // getProjects();
+    getProjects();
   }, []);
 
   const getProjects = async () => {
@@ -59,7 +43,6 @@ const Project = () => {
   };
 
   const onCardPress = item => {
-    console.log(item, 'navigation');
     navigation.navigate('projectdescription', {item: item});
   };
 
@@ -69,14 +52,19 @@ const Project = () => {
         style={styles.card}
         key={index}
         onPress={() => onCardPress(item)}>
-        <View style={{width: '20%'}}></View>
-        <View style={{width: '80%'}}>
+        <View>
+          <Text style={styles.cardDate} numberOfLines={1}>
+            {item.id}
+          </Text>
           <Text style={styles.cardTitle}>{item.name}</Text>
           <Text style={styles.cardDesc}>{item.description}</Text>
           <Text style={styles.cardDate}>
             {item.createdDate} - {item.deadlineDate}
           </Text>
           <Text style={styles.cardPriority}>Priority - {item.priority}</Text>
+          <Text style={styles.cardDate}>
+            Attachment - {item?.files?.length}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -96,7 +84,9 @@ const Project = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.floatBtn} onPress={() => navigation.navigate('addproject')}>
+      <TouchableOpacity
+        style={styles.floatBtn}
+        onPress={() => navigation.navigate('addproject')}>
         <AntDesign name="plus" size={scale(22)} color={Colors.white} />
       </TouchableOpacity>
     </ImageBackground>
@@ -119,44 +109,44 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    alignSelf: 'center',
+    padding: scale(8),
     height: scale(120),
+    alignSelf: 'center',
+    flexDirection: 'row',
     borderRadius: scale(8),
     backgroundColor: Colors.white,
-    flexDirection: 'row',
-    // alignItems:'center',
     justifyContent: 'space-between',
-    padding: scale(8),
+    marginVertical:scale(8)
   },
   cardTitle: {
+    color: Colors.black,
     fontSize: scale(16),
     fontFamily: Fonts.AntaRegular,
-    color: Colors.black,
   },
   cardDesc: {
+    color: Colors.blue,
     fontSize: scale(12),
     fontFamily: Fonts.AntaRegular,
-    color: Colors.blue,
   },
   cardDate: {
+    color: Colors.black,
     fontSize: scale(12),
     fontFamily: Fonts.AntaRegular,
-    color: Colors.black,
   },
   cardPriority: {
+    color: Colors.blue,
     fontSize: scale(12),
     fontFamily: Fonts.AntaRegular,
-    color: Colors.blue,
   },
-  floatBtn:{
-    height:scale(50),
-    width:scale(50),
-    borderRadius:scale(25),
-    backgroundColor:Colors.blue,
-    alignItems:'center',
-    justifyContent:'center',
-    position:'absolute',
-    bottom:scale(10),
-    right:scale(10)
-  }
+  floatBtn: {
+    width: scale(50),
+    right: scale(10),
+    bottom: scale(10),
+    height: scale(50),
+    alignItems: 'center',
+    position: 'absolute',
+    borderRadius: scale(25),
+    justifyContent: 'center',
+    backgroundColor: Colors.blue,
+  },
 });

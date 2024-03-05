@@ -2,20 +2,21 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {TextInput, HelperText, Avatar} from 'react-native-paper';
 import {Fonts} from '../utils/Fonts';
+import { Colors } from '../utils/Colors';
 
 const CInput = ({
   label,
   value,
-  onChangeText,
   error,
-  errorText,
-  showImage,
   iconImg,
   disabled,
   multiline,
+  errorText,
+  showImage,
+  otherStyle,
+  onChangeText,
   numberOfLines,
   secureTextEntry,
-  otherStyle,
   ...props
 }) => {
   return (
@@ -32,6 +33,7 @@ const CInput = ({
         disabled={disabled}
         numberOfLines={numberOfLines}
         multiline={multiline}
+        textColor={Colors.black}
       />
       {showImage && (
         <Avatar.Image

@@ -6,13 +6,13 @@ import {scale} from '../utils/Matrix';
 import moment from 'moment';
 import {Fonts} from '../utils/Fonts';
 
-const CDatePicker = ({placeholder,onDateSelect}) => {
+const CDatePicker = ({placeholder,onDateSelect,otherStyle}) => {
   const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <TouchableOpacity onPress={() => setOpen(true)} style={styles.container}>
+      <TouchableOpacity onPress={() => setOpen(true)} style={[styles.container,otherStyle]}>
         <Text style={styles.date}>{date == null ? placeholder : moment(date).format('ll')}</Text>
       </TouchableOpacity>
       <DatePicker

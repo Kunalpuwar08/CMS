@@ -1,17 +1,18 @@
 import {
-  ImageBackground,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import {bg} from '../../assets';
-import {scale} from '../../utils/Matrix';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Colors} from '../../utils/Colors';
+import Pdf from 'react-native-pdf';
 import {Fonts} from '../../utils/Fonts';
+import {scale} from '../../utils/Matrix';
+import {Colors} from '../../utils/Colors';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const ProjectDetails = () => {
   const route = useRoute();
@@ -53,7 +54,21 @@ const ProjectDetails = () => {
           <Text style={styles.desc}>{data?.description}</Text>
         </View>
         <Text style={styles.title}>Task Details</Text>
-        <View style={styles.boxDetail}></View>
+        <View style={styles.boxDetail}>
+          <View style={styles.boxleft}>
+            <Text style={styles.boxrow(1)}>Id</Text>
+            <Text style={styles.boxrow(1)}>Status</Text>
+            <Text style={styles.boxrow(0)}>Priority</Text>
+          </View>
+          <View style={styles.boxright}>
+            <Text style={styles.boxrow(1)} numberOfLines={1}>
+              {data?.id}
+            </Text>
+            <Text style={styles.boxrow(1)}>{data?.status}</Text>
+            <Text style={styles.boxrow(0)}>{data?.priority}</Text>
+          </View>
+        </View>
+
       </View>
     </ImageBackground>
   );
@@ -66,28 +81,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    padding: scale(8),
     height: scale(50),
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: scale(8),
-    borderBottomWidth: scale(0.2),
     borderColor: Colors.white,
+    borderBottomWidth: scale(0.2),
+    justifyContent: 'space-between',
   },
   backBtn: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   backTxt: {
     fontSize: scale(15),
     color: Colors.white,
-    fontFamily: Fonts.AntaRegular,
     marginLeft: scale(12),
+    fontFamily: Fonts.AntaRegular,
   },
   mainView: {
     width: '90%',
-    alignSelf: 'center',
     padding: scale(8),
+    alignSelf: 'center',
   },
   title: {
     fontSize: scale(18),
@@ -95,8 +110,8 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.AntaRegular,
   },
   profile: {
-    height: scale(40),
     width: scale(40),
+    height: scale(40),
     borderRadius: scale(20),
     backgroundColor: Colors.white,
   },
@@ -105,8 +120,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   card: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
     marginVertical: scale(12),
   },
   cardDetail: {
@@ -114,26 +129,45 @@ const styles = StyleSheet.create({
   },
   label: {
     color: Colors.grey,
-    fontFamily: Fonts.AntaRegular,
     fontSize: scale(12),
+    fontFamily: Fonts.AntaRegular,
   },
   value: {
     color: Colors.white,
-    fontFamily: Fonts.AntaRegular,
     fontSize: scale(14),
+    fontFamily: Fonts.AntaRegular,
   },
   desc: {
     color: Colors.white,
-    fontFamily: Fonts.AntaRegular,
     fontSize: scale(12),
     marginVertical: scale(12),
+    fontFamily: Fonts.AntaRegular,
   },
   boxDetail: {
     width: '100%',
-    alignSelf: 'center',
     height: scale(120),
-    backgroundColor: Colors.grey,
+    alignSelf: 'center',
     borderRadius: scale(8),
     marginVertical: scale(8),
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
+  boxleft: {
+    width: '40%',
+    height: '100%',
+    borderRightWidth: 1,
+  },
+  boxright: {
+    width: '60%',
+    height: '100%',
+  },
+  boxrow: width => ({
+    height: '33%',
+    padding: scale(8),
+    borderBottomWidth: width,
+    textAlignVertical: 'center',
+    fontFamily: Fonts.AntaRegular,
+    color: Colors.black,
+  }),
 });

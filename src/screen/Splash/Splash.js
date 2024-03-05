@@ -24,6 +24,8 @@ const Splash = () => {
         ? navigation.navigate('adminhome')
         : role == 'employee'
         ? navigation.navigate('home')
+        : role == 'super admin'
+        ? navigation.navigate('superadminhome')
         : null;
     }
   }

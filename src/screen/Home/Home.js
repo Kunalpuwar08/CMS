@@ -43,6 +43,7 @@ const Home = () => {
     let res = await getData('userAuth');
     if (res !== null) {
       const user = res.user;
+      console.log(user,"user>>>>>>>>");
       setStoreData(user);
     }
   }

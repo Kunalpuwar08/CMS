@@ -14,6 +14,9 @@ import EmployeeLeave from '../screen/Leave/EmployeeLeave';
 import Project from '../screen/Project/Project';
 import AddProject from '../screen/Project/AddProject';
 import ProjectDetails from '../screen/Project/ProjectDetails';
+import SuperAdminHome from '../screen/SuperAdmin/SuperAdminHome';
+import CreateAdmin from '../screen/SuperAdmin/CreateAdmin';
+import ChangePassword from '../screen/Auth/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +26,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="signup" component={Signup} />
+      <Stack.Screen name="changePassword" component={ChangePassword} />
       {/* Employee Home */}
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen name="employee" component={Employee} />
@@ -36,6 +40,11 @@ const AppNavigator = () => {
       <Stack.Screen name="project" component={Project} />
       <Stack.Screen name="addproject" component={AddProject} />
       <Stack.Screen name="projectdescription" component={ProjectDetails} />
+
+      {/* Super Admin */}
+      <Stack.Screen name="superadminhome" component={SuperAdminHome} />
+      <Stack.Screen name="createadmin" component={CreateAdmin} />
+
     </Stack.Navigator>
   );
 };
