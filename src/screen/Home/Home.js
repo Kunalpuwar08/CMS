@@ -26,7 +26,7 @@ const Home = () => {
     {id: 2, name: 'Project', navigate: 'employeeprofile'},
     {id: 3, name: 'Leave', navigate: 'employeeleave'},
     {id: 4, name: 'Assets', navigate: 'employeeprofile'},
-    {id: 5, name: 'Timesheet', navigate: 'employeeprofile'},
+    {id: 5, name: 'Timesheet', navigate: 'timesheet'},
   ];
 
   useEffect(() => {

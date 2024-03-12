@@ -7,7 +7,7 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {bg} from '../../assets';
 import {scale} from '../../utils/Matrix';
 import {Colors} from '../../utils/Colors';
@@ -21,9 +21,14 @@ import {getData} from '../../component/CommonStorage';
 import axios from 'axios';
 import {API_URL} from '../../constant';
 import Toast from 'react-native-toast-message';
+import { UserAuthContext } from '../../context/authContext';
 
 const CreateAsset = () => {
   const navigation = useNavigation();
+  
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const { token } = useUserAuthContext();
+
   const [imgObj, setImgObj] = useState(null);
   const [name, setName] = useState('');
   const [status, setStatus] = useState('');
@@ -62,8 +67,6 @@ const CreateAsset = () => {
     formData.append('brand', brand);
     formData.append('description', description);
 
-    const storedData = await getData('userAuth');
-    const token = storedData?.token;
 
     await axios
       .post(`${API_URL}/assets`, formData, {

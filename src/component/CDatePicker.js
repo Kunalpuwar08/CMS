@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     padding: scale(12),
   },
   date: {
-    color: Colors.black,
-    fontFamily: Fonts.AntaRegular,
+    color: '#454545',
+    // fontFamily: Fonts.AntaRegular,
     fontSize: scale(14),
   },
 });

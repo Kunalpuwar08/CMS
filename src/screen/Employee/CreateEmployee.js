@@ -36,7 +36,7 @@ const CreateEmployee = () => {
     const data = {name, email, companyName};
 
     await axios
-      .post(`http://10.0.2.2:8080/employees`, data, {
+      .post(`${API_URL}/employees`, data, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: token,

@@ -18,16 +18,19 @@ import {Colors} from '../../utils/Colors';
 import CInput from '../../component/CInput';
 import CLoader from '../../component/CLoader';
 import Toast from 'react-native-toast-message';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CDropdown from '../../component/CDropdown';
 import {getData} from '../../component/CommonStorage';
 import CDatePicker from '../../component/CDatePicker';
 import {useNavigation} from '@react-navigation/native';
 import DocumentPicker from 'react-native-document-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { UserAuthContext } from '../../context/authContext';
 
 const AddProject = () => {
   const navigation = useNavigation();
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const { token } = useUserAuthContext();
 
   useEffect(() => {
     getAllEmp();
@@ -124,9 +127,6 @@ const AddProject = () => {
       formData.append('files', file);
     });
 
-    const storedData = await getData('userAuth');
-    const token = storedData?.token;
-
     await axios
       .post(`${API_URL}/createproject`, formData, {
         headers: {
@@ -167,9 +167,6 @@ const AddProject = () => {
   };
 
   const getAllEmp = async () => {
-    const storedData = await getData('userAuth');
-    const token = storedData?.token;
-
     await axios
       .get(`${API_URL}/employeesName`, {
         headers: {

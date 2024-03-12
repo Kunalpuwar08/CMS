@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -21,9 +21,13 @@ import {getData} from '../../component/CommonStorage';
 import CDatePicker from '../../component/CDatePicker';
 import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {UserAuthContext} from '../../context/authContext';
 
 const EmployeeLeave = () => {
   const navigation = useNavigation();
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const {token} = useUserAuthContext();
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [reason, setReason] = useState('');
@@ -49,9 +53,6 @@ const EmployeeLeave = () => {
         endDate,
         reason,
       };
-
-      const storedData = await getData('userAuth');
-      const token = storedData?.token;
 
       await axios
         .post(`${API_URL}/applyleave`, data, {

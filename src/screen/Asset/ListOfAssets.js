@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {bg, emptyImg} from '../../assets';
 import {scale} from '../../utils/Matrix';
 import {Colors} from '../../utils/Colors';
@@ -17,15 +17,18 @@ import {API_URL} from '../../constant';
 import QRCode from 'react-native-qrcode-svg';
 import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { UserAuthContext } from '../../context/authContext';
 
 const ListOfAssets = () => {
   const navigation = useNavigation();
+  
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const { token } = useUserAuthContext();
+
   const [listOfAsset, setListOfAsset] = useState([]);
 
   useEffect(() => {
     const callApi = async () => {
-      const data = await getData('userAuth');
-      const token = data?.token;
       const apiData = await axios.get(`${API_URL}/assets`, {
         headers: {
           'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Colors} from '../../utils/Colors';
 import axios from 'axios';
 import {getData} from '../../component/CommonStorage';
@@ -17,15 +17,18 @@ import {scale} from '../../utils/Matrix';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import { Fonts } from '../../utils/Fonts';
+import { UserAuthContext } from '../../context/authContext';
 
 const Employee = () => {
   const navigation = useNavigation();
+  
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const { token } = useUserAuthContext();
+
   const [listOfEmployee, setListOfEmployee] = useState([]);
 
   useEffect(() => {
     const callApi = async () => {
-      const data = await getData('userAuth');
-      const token = data?.token;
       const apiData = await axios.get(`${API_URL}/employees`, {
         headers: {
           'Content-Type': 'application/json',

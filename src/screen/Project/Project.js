@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {API_URL} from '../../constant';
 import {bg} from '../../assets';
@@ -16,9 +16,12 @@ import {Colors} from '../../utils/Colors';
 import {getData} from '../../component/CommonStorage';
 import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { UserAuthContext } from '../../context/authContext';
 
 const Project = () => {
   const navigation = useNavigation();
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const { token } = useUserAuthContext();
   const [listData, setListData] = useState([]);
 
   useEffect(() => {
@@ -26,9 +29,6 @@ const Project = () => {
   }, []);
 
   const getProjects = async () => {
-    const storedData = await getData('userAuth');
-    const token = storedData?.token;
-
     await axios
       .get(`${API_URL}/getprojects`, {
         headers: {

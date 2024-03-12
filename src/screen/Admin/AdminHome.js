@@ -1,30 +1,33 @@
 import {
   Text,
   View,
+  Image,
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {bg, employeeImg} from '../../assets';
-import {scale} from '../../utils/Matrix';
-import {Colors} from '../../utils/Colors';
-import {useNavigation} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Fonts} from '../../utils/Fonts';
-import {getData} from '../../component/CommonStorage';
 import axios from 'axios';
 import {API_URL} from '../../constant';
+import {Fonts} from '../../utils/Fonts';
+import {scale} from '../../utils/Matrix';
+import {Colors} from '../../utils/Colors';
+import {bg, employeeImg} from '../../assets';
+import {getData} from '../../component/CommonStorage';
+import {useNavigation} from '@react-navigation/native';
+import {UserAuthContext} from '../../context/authContext';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, {useContext, useEffect, useState} from 'react';
 
 const AdminHome = () => {
   const navigation = useNavigation();
+
+  const useUserAuthContext = () => useContext(UserAuthContext);
+  const {token} = useUserAuthContext();
+
   const [listOfEmployee, setListOfEmployee] = useState([]);
 
   useEffect(() => {
     const callApi = async () => {
-      const data = await getData('userAuth');
-      const token = data?.token;
       const apiData = await axios.get(`${API_URL}/employees`, {
         headers: {
           'Content-Type': 'application/json',
@@ -64,8 +67,9 @@ const AdminHome = () => {
 
         <View style={styles.cardWrapper}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('TimesheetList')}
             style={styles.card(Colors.white)}></TouchableOpacity>
-          <Text style={styles.cardTxt}>Client</Text>
+          <Text style={styles.cardTxt}>Timesheet</Text>
         </View>
 
         <View style={styles.cardWrapper}>
@@ -80,6 +84,13 @@ const AdminHome = () => {
             onPress={() => navigation.navigate('assets')}
             style={styles.card(Colors.white)}></TouchableOpacity>
           <Text style={styles.cardTxt}>Asset</Text>
+        </View>
+
+        <View style={styles.cardWrapper}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('LeaveManagment')}
+            style={styles.card(Colors.white)}></TouchableOpacity>
+          <Text style={styles.cardTxt}>Leave</Text>
         </View>
       </View>
 
@@ -138,10 +149,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    flexWrap: 'wrap',
+    height: scale(100),
+    overflow: 'hidden',
   },
   cardWrapper: {
     padding: scale(12),
     alignItems: 'center',
+    width: '25%',
   },
   card: color => ({
     elevation: 6,
@@ -154,6 +169,7 @@ const styles = StyleSheet.create({
     margin: scale(8),
     color: Colors.white,
     fontFamily: Fonts.AntaRegular,
+    fontSize: scale(10),
   },
   boxContainer: {
     width: '90%',
@@ -165,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(12),
     backgroundColor: Colors.white,
     justifyContent: 'space-between',
-    padding:scale(8)
+    padding: scale(8),
   },
   cardTitle: {
     color: Colors.blue,

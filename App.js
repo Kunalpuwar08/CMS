@@ -7,6 +7,7 @@ import {requestNotificationPermission} from './src/common/notificationPermission
 import handleNotification from './src/common/handleNotification';
 import {saveData} from './src/component/CommonStorage';
 import messaging from '@react-native-firebase/messaging';
+import UserAuthProvider from './src/context/authContext';
 
 const App = () => {
   useEffect(() => {
@@ -24,7 +25,6 @@ const App = () => {
       .getToken()
       .then(fcmToken => {
         if (fcmToken) {
-          console.log(fcmToken, 'FCM>>>>>>>>>>>>>>>>>>>>>');
           saveData('FcmToken', fcmToken);
         } else {
           console.error('No FCM token available');
@@ -40,9 +40,11 @@ const App = () => {
 
   return (
     <PaperProvider>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
+      <UserAuthProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </UserAuthProvider>
       <Toast />
     </PaperProvider>
   );

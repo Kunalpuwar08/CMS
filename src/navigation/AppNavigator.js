@@ -17,6 +17,10 @@ import ProjectDetails from '../screen/Project/ProjectDetails';
 import SuperAdminHome from '../screen/SuperAdmin/SuperAdminHome';
 import CreateAdmin from '../screen/SuperAdmin/CreateAdmin';
 import ChangePassword from '../screen/Auth/ChangePassword';
+import LeaveManagment from '../screen/Admin/LeaveManagment';
+import Timesheet from '../screen/Timesheet/Timesheet';
+import AddTimesheet from '../screen/Timesheet/AddTimesheet';
+import TimesheetList from '../screen/Admin/TimesheetList';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,11 +39,15 @@ const AppNavigator = () => {
       <Stack.Screen name="createassets" component={CreateAsset} />
       <Stack.Screen name="employeeprofile" component={Employee_profile} />
       <Stack.Screen name="employeeleave" component={EmployeeLeave} />
+      <Stack.Screen name="timesheet" component={Timesheet} />
+      <Stack.Screen name="addTimesheet" component={AddTimesheet} />
       {/* Admin */}
       <Stack.Screen name="adminhome" component={AdminHome} />
       <Stack.Screen name="project" component={Project} />
       <Stack.Screen name="addproject" component={AddProject} />
       <Stack.Screen name="projectdescription" component={ProjectDetails} />
+      <Stack.Screen name="LeaveManagment" component={LeaveManagment} />
+      <Stack.Screen name="TimesheetList" component={TimesheetList} />
 
       {/* Super Admin */}
       <Stack.Screen name="superadminhome" component={SuperAdminHome} />
